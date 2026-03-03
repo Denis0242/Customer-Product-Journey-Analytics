@@ -62,14 +62,6 @@ A **production-ready, portfolio-quality analytics platform** with:
 
 ## 🚀 Getting Started (Choose One)
 
-### Option 1: Docker (EASIEST - 2 Minutes)
-```bash
-cd your_project_directory
-docker-compose up --build
-
-# Open browser to http://localhost:8501
-```
-
 ### Option 2: Local Setup (MANUAL - 10 Minutes)
 ```bash
 # 1. Python setup
