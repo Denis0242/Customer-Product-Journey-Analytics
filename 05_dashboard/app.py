@@ -100,13 +100,31 @@ st.markdown("""
 #             return pd.DataFrame()
 #     return pd.DataFrame()
 
+
+DATA_PATH = os.path.join("02_data_generation", "data")
+
+# ============================================================================
+# DATA LOADING FUNCTION
+# ============================================================================
+
 def load_csv(filename):
+    path = os.path.join(DATA_PATH, filename)
+    
+    if os.path.exists(path):
+        return pd.read_csv(path)
+    else:
+        st.error(f"File not found: {path}")
+        return pd.DataFrame()
+
+
+
+'''def load_csv(filename):
             path = (f'02_data_generation/data/{filename}')
             if os.path.exists(path):
                 return pd.read_csv(path)
             else:
                 st.error(f"File not found: {path}")
-                return pd.DataFrame()
+                return pd.DataFrame()'''
 
 # ============================================================================
 # DATA LOADING FUNCTIONS
