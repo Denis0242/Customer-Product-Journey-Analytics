@@ -101,7 +101,7 @@ st.markdown("""
 #     return pd.DataFrame()
 
 
-DATA_PATH = os.path.join("02_data_generation", "data")
+DATA_PATH = os.path("02_data_generation/data")
 
 # ============================================================================
 # DATA LOADING FUNCTION
