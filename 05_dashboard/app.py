@@ -105,7 +105,7 @@ st.markdown("""
 
 
 
-def load_csv(filename):
+def load_csv(filename: str) -> pd.DataFrame:
             base_dir= Path(__file__).resolve().parent.parent 
             "02_data_generation" / "data" / filename
             if data_path.exists():
