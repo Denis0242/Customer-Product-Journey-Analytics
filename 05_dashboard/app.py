@@ -105,14 +105,15 @@ st.markdown("""
 
 
 
-def load_csv(filename: str) -> pd.DataFrame:
-            base_dir= Path(__file__).resolve().parent.parent 
-            "02_data_generation" / "data" / filename
-            if data_path.exists():
-                return pd.read_csv(data_path)
-            else:
-                st.error(f"File not found: {data_path}")
-                return pd.DataFrame()
+def load_csv(filename):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root
+    data_path = os.path.join(base_dir, "02_data_generation", "data", filename)
+
+    if os.path.exists(data_path):
+        return pd.read_csv(data_path)
+    else:
+        st.error(f"File not found: {data_path}")
+        return pd.DataFrame()
 
 # ============================================================================
 # DATA LOADING FUNCTIONS
