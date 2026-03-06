@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
-
+from pathlib import Path
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -66,6 +66,7 @@ st.set_page_config(
 
 def load_csv(filename):
             path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
+
             if os.path.exists(path):
                 return pd.read_csv(path)
             else:

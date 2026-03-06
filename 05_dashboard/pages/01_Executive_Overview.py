@@ -10,6 +10,7 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # ============================================================================
 # PAGE CONFIGURATION
@@ -37,6 +38,7 @@ def main(data=None):
         @st.cache_data(ttl=600)
         def load_csv(filename):
             path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
+
             if os.path.exists(path):
                 return pd.read_csv(path)
             else:

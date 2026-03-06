@@ -11,7 +11,7 @@ import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
 import os
-
+from pathlib import Path
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -110,12 +110,11 @@ def load_customer_journey_csv():
 @st.cache_data(ttl=600)
 def load_csv(filename):
     """Load CSV file from data folder"""
-    data_dir = 'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/'
-    file_path = os.path.join(data_dir, filename)
+    path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
     
     try:
-        if not os.path.exists(file_path):
-            st.warning(f"File not found: {file_path}")
+        if not os.path.exists(path):
+            st.warning(f"File not found: {path}")
             return pd.DataFrame()
         
         df = pd.read_csv(file_path)

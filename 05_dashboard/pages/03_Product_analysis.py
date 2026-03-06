@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
-
+from pathlib import Path
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -90,7 +90,7 @@ def load_transactions_csv():
             - transaction_amount, profit_amount, payment_method
             - order_status, is_repeat_purchase
     """
-    path = r'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/transactions.csv'
+    path =r'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/transactions.csv'
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
     return pd.read_csv(path)
