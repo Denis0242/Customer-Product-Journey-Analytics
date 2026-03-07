@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
-from pathlib import Path
+
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -60,7 +60,6 @@ st.set_page_config(
 
 def load_csv(filename):
             path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
-
             if os.path.exists(path):
                 return pd.read_csv(path)
             else:
@@ -89,10 +88,10 @@ def calculate_customer_dimensions(transactions_df, customers_df, journey_df):
     engagement['engagement'] = (engagement['engagement'] / engagement['engagement'].max() * 100).round(2)
     
     # Calculate loyalty score (repeat purchases)
-    loyalty = trans.groupby('customer_id').agg({
-        'transaction_id': 'count',
-        'customer_id': 'count'
-    }).reset_index()
+    loyalty = trans.groupby('customer_id').agg(
+        purchases=('transaction_id', 'count')
+    ).reset_index()
+    
     loyalty = loyalty.rename(columns={'transaction_id': 'purchases'})
     loyalty['loyalty'] = (loyalty['purchases'] / loyalty['purchases'].max() * 100).round(2)
     

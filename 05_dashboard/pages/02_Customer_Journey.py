@@ -11,7 +11,7 @@ import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
 import os
-from pathlib import Path
+
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -110,11 +110,12 @@ def load_customer_journey_csv():
 @st.cache_data(ttl=600)
 def load_csv(filename):
     """Load CSV file from data folder"""
-    path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
+    data_dir = 'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/'
+    file_path = os.path.join(data_dir, filename)
     
     try:
-        if not os.path.exists(path):
-            st.warning(f"File not found: {path}")
+        if not os.path.exists(file_path):
+            st.warning(f"File not found: {file_path}")
             return pd.DataFrame()
         
         df = pd.read_csv(file_path)
@@ -375,21 +376,39 @@ def main():
     
     col1, col2 = st.columns(2)
     
+    # with col1:
+    #     fig_events_bar = px.bar(
+    #         x=event_dist.index,
+    #         y=event_dist.values,
+    #         title='Top Events by Count',
+    #         labels={'x': 'Event Type', 'y': 'Count'},
+    #         color=event_dist.index,
+    #         text=event_dist.values,
+    #         color_discrete_sequence=px.colors.qualitative.Set3
+    #     )
+    #     fig_events_bar.update_traces(textposition='outside')
+    #     fig_events_bar.update_xaxes(tickangle=-45)
+    #     fig_events_bar.update_layout(height=400, showlegend=False)
+    #     st.plotly_chart(fig_events_bar, use_container_width=True)
     with col1:
+        event_dist_df = event_dist.reset_index()
+        event_dist_df.columns = ['event_type', 'count']
+        
         fig_events_bar = px.bar(
-            x=event_dist.index,
-            y=event_dist.values,
+            event_dist_df,
+            x='event_type',
+            y='count',
             title='Top Events by Count',
-            labels={'x': 'Event Type', 'y': 'Count'},
-            color=event_dist.index,
-            text=event_dist.values,
+            labels={'event_type': 'Event Type', 'count': 'Count'},
+            color='event_type',
+            text='count',
             color_discrete_sequence=px.colors.qualitative.Set3
         )
         fig_events_bar.update_traces(textposition='outside')
         fig_events_bar.update_xaxes(tickangle=-45)
         fig_events_bar.update_layout(height=400, showlegend=False)
         st.plotly_chart(fig_events_bar, use_container_width=True)
-    
+        
     with col2:
         fig_events_pie = px.pie(
             values=event_dist.values,
@@ -439,13 +458,24 @@ def main():
             Conv Rate: {best_conv_device['conversion_rate'].values[0]:.2f}%
             """)
     
-    with col3:
-        most_common_event = event_dist.idxmax()
-        st.info(f"""
-            **Most Common Event:** {most_common_event.replace('_', ' ').title()}
+    # with col3:
+    #     most_common_event = event_dist.idxmax()
+    #     st.info(f"""
+    #         **Most Common Event:** {most_common_event.replace('_', ' ').title()}
             
-            Occurrences: {event_dist.max():,}
-            """)
+    #         Occurrences: {event_dist.max():,}
+    #         """)
+
+    with col3:
+        if not event_dist.empty:
+            most_common_event = event_dist.idxmax()
+            st.info(f"""
+                **Most Common Event:** {most_common_event.replace('_', ' ').title()}
+                
+                Occurrences: {event_dist.max():,}
+                """)
+        else:
+            st.info("**Most Common Event:** No data available for selected filters.")
 
 if __name__ == "__main__":
     main()

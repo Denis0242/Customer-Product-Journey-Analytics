@@ -11,7 +11,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import mysql.connector
 from datetime import datetime, timedelta
-from pathlib import Path
+
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -60,12 +60,11 @@ st.set_page_config(
 
 def load_csv(filename):
             path = f'C:/My_Projects/All_Projects/cx_product_cap/02_data_generation/data/{filename}'
-
             if os.path.exists(path):
-                 return pd.read_csv(path)
+                return pd.read_csv(path)
             else:
-                 st.error(f"File not found: {path}")
-                 return pd.DataFrame()
+                st.error(f"File not found: {path}")
+                return pd.DataFrame()
 
 # def load_economics_data():
 #     return load_csv('transactions.csv')
@@ -112,24 +111,18 @@ def calculate_cohort_analysis(transactions_df, customers_df):
     trans['transaction_date'] = pd.to_datetime(trans['transaction_date'])
     customers_df['signup_date'] = pd.to_datetime(customers_df['signup_date'])
     
-    # Merge to get signup dates
     trans = trans.merge(customers_df[['customer_id', 'signup_date']], on='customer_id')
     
-    # Create cohort
     trans['cohort'] = trans['signup_date'].dt.to_period('M')
     trans['month'] = trans['transaction_date'].dt.to_period('M')
-    
-    # Calculate months since signup
     trans['months_since_signup'] = (trans['month'] - trans['cohort']).apply(lambda x: x.n)
     
-    # Cohort analysis
     cohort = trans.groupby(['cohort', 'months_since_signup']).agg({
         'customer_id': 'nunique'
     }).reset_index()
     
     cohort.columns = ['cohort', 'months_since_signup', 'customers']
     
-    # Pivot for cohort table
     cohort_pivot = cohort.pivot_table(
         index='cohort',
         columns='months_since_signup',
@@ -137,7 +130,12 @@ def calculate_cohort_analysis(transactions_df, customers_df):
         fill_value=0
     )
     
+    # Convert Period index and column labels to strings
+    cohort_pivot.index = cohort_pivot.index.astype(str)
+    cohort_pivot.columns = cohort_pivot.columns.astype(str)
+    
     return cohort_pivot
+
 
 def calculate_retention_by_cohort(transactions_df, customers_df):
     """Calculate retention rate by cohort"""
@@ -152,16 +150,18 @@ def calculate_retention_by_cohort(transactions_df, customers_df):
     trans['month'] = trans['transaction_date'].dt.to_period('M')
     trans['months_since_signup'] = (trans['month'] - trans['cohort']).apply(lambda x: x.n)
     
-    # First month cohort size
     cohort_size = trans[trans['months_since_signup'] == 0].groupby('cohort')['customer_id'].nunique()
-    
-    # Users returning by month
     cohort_return = trans.groupby(['cohort', 'months_since_signup'])['customer_id'].nunique()
     
-    # Retention rate
     retention = cohort_return.div(cohort_size, level='cohort') * 100
     
-    return retention.unstack(fill_value=0)
+    retention_table = retention.unstack(fill_value=0)
+    
+    # Convert Period index and column labels to strings
+    retention_table.index = retention_table.index.astype(str)
+    retention_table.columns = retention_table.columns.astype(str)
+    
+    return retention_table
 
 def calculate_customer_acquisition(customers_df):
     """Calculate monthly customer acquisition"""
