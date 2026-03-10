@@ -15,6 +15,9 @@ import mysql.connector
 from mysql.connector import Error
 from pathlib import Path
 
+
+
+
 # ============================================================================
 # PAGE CONFIGURATION
 # ============================================================================
@@ -32,6 +35,24 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* Hide Streamlit multipage sidebar navigation */
+    [data-testid="stSidebarNav"] {
+        display: none;
+    }
+
+    /* Hide default Streamlit menu, header, and footer */
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
     .metric-card {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 20px;
@@ -100,9 +121,6 @@ st.markdown("""
 #             st.error(f"Query error: {e}")
 #             return pd.DataFrame()
 #     return pd.DataFrame()
-
-
-
 
 
 def load_csv(filename):
@@ -410,7 +428,7 @@ def page_product_analysis(data):
 
 def page_unit_economics(data):
     """Unit Economics Analysis"""
-    st.title("💹 Unit Economics & Profitability")
+    st.title("⚖️ Unit Economics & Profitability")
     
     trans_copy = data['transactions'].copy()
     trans_copy['transaction_date'] = pd.to_datetime(trans_copy['transaction_date'])
@@ -548,6 +566,7 @@ def page_growth_metrics(data):
     )['customer_id'].nunique().unstack(fill_value=0)
     
     st.write(cohort_retention.head(10))
+    
 
 # ============================================================================
 # PAGE: CUSTOMER EXPERIENCE 3D
@@ -695,7 +714,7 @@ def page_predictions(data):
 def main():
     # Sidebar navigation
     with st.sidebar:
-        st.title("📊 Analytics Dashboard")
+        st.title("📊Customer Product Analytics Dashboard")
         
         page = option_menu(
             menu_title="Navigation",
