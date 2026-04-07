@@ -74,6 +74,8 @@ Product teams need visibility into:
 
 Tracks user progression from Login → Activation → Conversion, highlighting key drop-off points in the product journey.
 
+---
+
 ### Retention & Cohort Analysis
 ![Retention](assets/Retention.png)
 
