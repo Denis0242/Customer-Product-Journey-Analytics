@@ -68,10 +68,15 @@ Product teams need visibility into:
 ---
 
 ## 📊 Dashboard Preview
+
+### Product Funnel Overview
 ![Funnel](assets/Funnel.png)
+
 Tracks user progression from Login → Activation → Conversion, highlighting key drop-off points in the product journey.
 
+### Retention & Cohort Analysis
 ![Retention](assets/Retention.png)
+
 Shows user retention over time using cohort analysis, helping identify long-term engagement patterns.
 
 ---
